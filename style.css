@@ -9,10 +9,10 @@ Based on the https://www.shadertoy.com/view/MtVBzG
 :root {
   --primary-font: "Boldonse", sans-serif;
   --secondary-font: "Bodoni Moda", serif;
-  --primary-color: #e0e0e0;
+  --primary-color: #DBBEA1;
   --secondary-color: rgba(255, 255, 255, 0.5);
   --quote-size: 8vw;
-  --author-size: 1vw;
+  --author-size: 1.3vw;
   --cursor-size: 16px;
   --ghost-color: #000000;
   --eye-glow-color: #ffff00;
@@ -109,6 +109,7 @@ body::before {
 .quote-container {
   max-width: 90%;
   overflow: hidden;
+  margin-top: 100px;
 }
 
 .quote {
@@ -281,4 +282,316 @@ canvas {
 
 .profile-twitter a:hover {
   text-decoration: underline;
+}
+
+/* RESPONSIVE STYLES FOR TABLETS AND MOBILE */
+
+/* Large tablets (768px - 1024px) */
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  :root {
+    --quote-size: 10vw;
+    --author-size: 2.5vw;
+  }
+  
+  .quote-container {
+    max-width: 85%;
+    margin-top: 60px;
+  }
+  
+  .quote {
+    line-height: 1.25;
+    margin-bottom: 4vh;
+  }
+  
+  #controls {
+    top: 15px;
+    left: 15px;
+    gap: 15px;
+  }
+  
+  #playButton {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .profile-card {
+    bottom: 20px;
+    left: 20px;
+    max-width: 250px;
+  }
+  
+  .profile-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .profile-name {
+    font-size: 16px;
+  }
+  
+  .profile-twitter {
+    font-size: 14px;
+  }
+}
+
+/* Small tablets and large phones (480px - 767px) */
+@media screen and (max-width: 767px) and (min-width: 480px) {
+  :root {
+    --quote-size: 12vw;
+    --author-size: 3.5vw;
+  }
+  
+  html, body {
+    cursor: auto; /* Enable cursor for touch devices */
+  }
+  
+  .custom-cursor {
+    display: none; /* Hide custom cursor on touch devices */
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .quote-container {
+    max-width: 90%;
+    margin-top: 40px;
+  }
+  
+  .quote {
+    line-height: 1.2;
+    margin-bottom: 3vh;
+    letter-spacing: -0.01em;
+  }
+  
+  .author, .caption, .book {
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
+  }
+  
+  #controls {
+    top: 10px;
+    left: 10px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  #playButton {
+    padding: 12px 24px;
+    font-size: 18px;
+    touch-action: manipulation;
+  }
+  
+  #fps {
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+  }
+  
+  .profile-card {
+    bottom: 15px;
+    left: 15px;
+    max-width: 200px;
+    padding: 12px;
+  }
+  
+  .profile-image {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .profile-name {
+    font-size: 14px;
+  }
+  
+  .profile-twitter {
+    font-size: 12px;
+  }
+  
+  .info {
+    bottom: 8px;
+    left: 8px;
+    font-size: 10px;
+  }
+}
+
+/* Small phones (below 480px) */
+@media screen and (max-width: 479px) {
+  :root {
+    --quote-size: 14vw;
+    --author-size: 4vw;
+  }
+  
+  html, body {
+    cursor: auto;
+  }
+  
+  .custom-cursor {
+    display: none;
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
+  .quote-container {
+    max-width: 95%;
+    margin-top: 20px;
+  }
+  
+  .quote {
+    line-height: 1.15;
+    margin-bottom: 2vh;
+    letter-spacing: 0;
+  }
+  
+  .author, .caption, .book {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+  
+  #controls {
+    top: 8px;
+    left: 8px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  #playButton {
+    padding: 14px 28px;
+    font-size: 20px;
+    touch-action: manipulation;
+    border-radius: 8px;
+  }
+  
+  #fps {
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+  }
+  
+  .profile-card {
+    bottom: 10px;
+    left: 10px;
+    max-width: 180px;
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .profile-image {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .profile-name {
+    font-size: 12px;
+  }
+  
+  .profile-twitter {
+    font-size: 10px;
+  }
+  
+  .info {
+    bottom: 5px;
+    left: 5px;
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+  
+  /* Reduce noise animation intensity on small screens */
+  body::before {
+    background-size: 200px 200px;
+    opacity: 0.8;
+  }
+}
+
+/* Extra small phones (below 320px) */
+@media screen and (max-width: 319px) {
+  :root {
+    --quote-size: 16vw;
+    --author-size: 5vw;
+  }
+  
+  .quote-container {
+    margin-top: 10px;
+  }
+  
+  .quote {
+    line-height: 1.1;
+    margin-bottom: 1.5vh;
+  }
+  
+  #playButton {
+    padding: 16px 32px;
+    font-size: 22px;
+  }
+  
+  .profile-card {
+    max-width: 160px;
+    padding: 8px;
+  }
+  
+  .profile-image {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .profile-name {
+    font-size: 11px;
+  }
+  
+  .profile-twitter {
+    font-size: 9px;
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+  .content {
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+  
+  .quote-container {
+    margin-top: 10px;
+    max-width: 80%;
+  }
+  
+  .quote {
+    font-size: 8vw;
+    line-height: 1.1;
+    margin-bottom: 2vh;
+  }
+  
+  .author, .caption, .book {
+    font-size: 2.5vw;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+  
+  #controls {
+    top: 5px;
+    left: 5px;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  #playButton {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .profile-card {
+    bottom: 5px;
+    left: 5px;
+    max-width: 150px;
+    padding: 6px;
+  }
+  
+  #fps {
+    top: 5px;
+    right: 5px;
+  }
 }

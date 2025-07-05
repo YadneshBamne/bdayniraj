@@ -78,7 +78,7 @@ const settings = {
   transitionSmoothness: 0.03, // How smooth the transition is
 
   // Color settings
-  colorPreset: "Monochrome",
+  colorPreset: "Metallic",
   bgColorDown: [40, 20, 10],
   bgColorUp: [20, 10, 5],
   color1In: [255, 200, 0],
@@ -102,67 +102,97 @@ const settings = {
 
 // Color presets
 const colorPresets = {
-  Default: {
-    bgColorDown: [51, 25, 25],
-    bgColorUp: [25, 25, 51],
-    color1In: [255, 128, 0],
-    color1Out: [255, 0, 0],
-    color2In: [0, 128, 255],
-    color2Out: [0, 0, 255],
-    color3In: [0, 255, 128],
-    color3Out: [0, 200, 100]
+  // Existing presets...
+
+  Arctic: {
+    bgColorDown: [220, 240, 255],
+    bgColorUp: [200, 230, 250],
+    color1In: [173, 216, 230], // Light Blue
+    color1Out: [135, 206, 250], // Sky Blue
+    color2In: [224, 255, 255], // Light Cyan
+    color2Out: [176, 224, 230], // Powder Blue
+    color3In: [240, 255, 255], // Azure
+    color3Out: [175, 238, 238] // Pale Turquoise
   },
-  Neon: {
-    bgColorDown: [10, 10, 20],
-    bgColorUp: [5, 5, 15],
-    color1In: [255, 0, 255], // Magenta
-    color1Out: [128, 0, 255], // Purple
-    color2In: [0, 255, 255], // Cyan
-    color2Out: [0, 128, 255], // Blue
-    color3In: [255, 255, 0], // Yellow
-    color3Out: [255, 128, 0] // Orange
+
+  Desert: {
+    bgColorDown: [237, 201, 175],
+    bgColorUp: [210, 180, 140],
+    color1In: [244, 164, 96],  // Sandy Brown
+    color1Out: [210, 105, 30], // Chocolate
+    color2In: [205, 133, 63],  // Peru
+    color2Out: [139, 69, 19],  // Saddle Brown
+    color3In: [255, 222, 173], // Navajo White
+    color3Out: [255, 160, 122] // Light Salmon
   },
-  Warm: {
-    bgColorDown: [40, 20, 10],
-    bgColorUp: [20, 10, 5],
-    color1In: [255, 200, 0], // Gold
-    color1Out: [255, 100, 0], // Orange
-    color2In: [255, 100, 100], // Light Red
-    color2Out: [200, 50, 50], // Dark Red
-    color3In: [255, 150, 50], // Light Orange
-    color3Out: [200, 100, 0] // Dark Orange
+
+  Romantic: {
+    bgColorDown: [255, 192, 203],
+    bgColorUp: [255, 182, 193],
+    color1In: [255, 105, 180], // Hot Pink
+    color1Out: [255, 20, 147], // Deep Pink
+    color2In: [219, 112, 147], // Pale Violet Red
+    color2Out: [199, 21, 133], // Medium Violet Red
+    color3In: [255, 160, 122], // Light Salmon
+    color3Out: [255, 114, 118] // Coral Rose
   },
-  Cool: {
-    bgColorDown: [10, 20, 30],
-    bgColorUp: [5, 10, 20],
-    color1In: [100, 200, 255], // Light Blue
-    color1Out: [0, 100, 200], // Dark Blue
-    color2In: [100, 255, 200], // Mint
-    color2Out: [0, 150, 100], // Green
-    color3In: [150, 200, 255], // Sky Blue
-    color3Out: [50, 100, 200] // Royal Blue
+
+  Metallic: {
+    bgColorDown: [40, 40, 40],
+    bgColorUp: [60, 60, 60],
+    color1In: [192, 192, 192], // Silver
+    color1Out: [128, 128, 128], // Gray
+    color2In: [255, 215, 0],   // Gold
+    color2Out: [184, 134, 11], // Dark Goldenrod
+    color3In: [205, 127, 50],  // Bronze
+    color3Out: [139, 69, 19]   // Saddle Brown
   },
-  Monochrome: {
-    bgColorDown: [10, 10, 10],
-    bgColorUp: [20, 20, 20],
-    color1In: [200, 200, 200], // Light Gray
-    color1Out: [150, 150, 150], // Mid Gray
-    color2In: [255, 255, 255], // White
-    color2Out: [100, 100, 100], // Dark Gray
-    color3In: [180, 180, 180], // Silver
-    color3Out: [120, 120, 120] // Gray
+
+  Toxic: {
+    bgColorDown: [0, 30, 0],
+    bgColorUp: [0, 50, 0],
+    color1In: [57, 255, 20],   // Neon Green
+    color1Out: [0, 255, 0],    // Lime
+    color2In: [255, 255, 0],   // Yellow
+    color2Out: [204, 255, 0],  // Chartreuse
+    color3In: [255, 0, 255],   // Magenta
+    color3Out: [153, 50, 204]  // Dark Orchid
   },
-  Cyberpunk: {
-    bgColorDown: [20, 0, 40],
-    bgColorUp: [0, 20, 40],
-    color1In: [255, 0, 128], // Hot Pink
-    color1Out: [200, 0, 100], // Dark Pink
-    color2In: [0, 255, 128], // Neon Green
-    color2Out: [0, 200, 100], // Dark Green
-    color3In: [255, 255, 0], // Neon Yellow
-    color3Out: [200, 200, 0] // Dark Yellow
+
+  Fantasy: {
+    bgColorDown: [45, 0, 60],
+    bgColorUp: [30, 0, 45],
+    color1In: [255, 0, 255],   // Magenta
+    color1Out: [138, 43, 226], // Blue Violet
+    color2In: [0, 255, 255],   // Cyan
+    color2Out: [0, 191, 255],  // Deep Sky Blue
+    color3In: [255, 255, 255], // White
+    color3Out: [200, 200, 200] // Light Gray
+  },
+
+  Midnight: {
+    bgColorDown: [10, 10, 30],
+    bgColorUp: [5, 5, 20],
+    color1In: [25, 25, 112],   // Midnight Blue
+    color1Out: [0, 0, 139],    // Dark Blue
+    color2In: [75, 0, 130],    // Indigo
+    color2Out: [138, 43, 226], // Blue Violet
+    color3In: [123, 104, 238], // Medium Slate Blue
+    color3Out: [72, 61, 139]   // Dark Slate Blue
+  },
+
+  Aurora: {
+    bgColorDown: [5, 0, 20],
+    bgColorUp: [0, 20, 30],
+    color1In: [0, 255, 127],   // Spring Green
+    color1Out: [0, 250, 154],  // Medium Spring Green
+    color2In: [0, 191, 255],   // Deep Sky Blue
+    color2Out: [135, 206, 235], // Sky Blue
+    color3In: [255, 0, 255],   // Magenta
+    color3Out: [186, 85, 211]  // Medium Orchid
   }
 };
+
 
 // Apply color preset
 function applyColorPreset(presetName) {
@@ -826,7 +856,7 @@ function setupAudio() {
   audioElement.preload = "auto";
 
   // Use the new audio URL
-  audioElement.src = "/getmoney.m4a";
+  audioElement.src = "/subeme.mp3";
   audioElement.loop = true;
 }
 
