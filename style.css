@@ -44,7 +44,7 @@ body::before {
   width: 200%;
   height: 200%;
   background: transparent
-    url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
+    url("https://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
   background-size: 300px 300px;
   animation: noise-animation 0.3s steps(5) infinite;
   opacity: 1;
@@ -54,39 +54,17 @@ body::before {
 }
 
 @keyframes noise-animation {
-  0% {
-    transform: translate(0, 0);
-  }
-  10% {
-    transform: translate(-2%, -3%);
-  }
-  20% {
-    transform: translate(-4%, 2%);
-  }
-  30% {
-    transform: translate(2%, -4%);
-  }
-  40% {
-    transform: translate(-2%, 5%);
-  }
-  50% {
-    transform: translate(-4%, 2%);
-  }
-  60% {
-    transform: translate(3%, 0);
-  }
-  70% {
-    transform: translate(0, 3%);
-  }
-  80% {
-    transform: translate(-3%, 0);
-  }
-  90% {
-    transform: translate(2%, 2%);
-  }
-  100% {
-    transform: translate(1%, 0);
-  }
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  20% { transform: translate(-4%, 2%); }
+  30% { transform: translate(2%, -4%); }
+  40% { transform: translate(-2%, 5%); }
+  50% { transform: translate(-4%, 2%); }
+  60% { transform: translate(3%, 0); }
+  70% { transform: translate(0, 3%); }
+  80% { transform: translate(-3%, 0); }
+  90% { transform: translate(2%, 2%); }
+  100% { transform: translate(1%, 0); }
 }
 
 /* Content to be revealed */
@@ -101,14 +79,21 @@ body::before {
   justify-content: center;
   align-items: center;
   z-index: 20;
-  padding: 20px;
+  padding: 16px;
   text-align: center;
   color: var(--primary-color);
+  pointer-events: none;
 }
 
 .quote-container {
   max-width: 90%;
-  overflow: hidden;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  pointer-events: auto;
 }
 
 .quote {
@@ -122,19 +107,41 @@ body::before {
   text-transform: uppercase;
 }
 
+/* Center Image with sharp corners */
+.image-centerpiece {
+  position: relative;
+  display: inline-block;
+  margin: 1.5vh auto 2vh;
+  border-radius: 0; /* Sharp corners as requested */
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+
+.center-photo {
+  display: block;
+  max-width: min(75vw, 340px);
+  max-height: 48vh;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0; /* Sharp corners as requested */
+}
+
 .author {
   font-family: var(--secondary-font);
-  font-size: var(--author-size);
+  font-size: clamp(0.75rem, 1.2vw, 1.1rem);
   font-style: italic;
-  opacity: 0.7;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  opacity: 0.75;
+  margin-top: 1.2vh;
+  margin-bottom: 1vh;
+  line-height: 1.35;
 }
 
 .caption {
   font-family: var(--secondary-font);
-  font-size: var(--author-size);
-  margin-bottom: 2vh;
+  font-size: clamp(0.8rem, 1.2vw, 1.15rem);
+  margin-bottom: 1.5vh;
+  line-height: 1.35;
 }
 
 .book {
@@ -159,7 +166,7 @@ body::before {
   will-change: transform;
 }
 
-/* Canvas overlay - Fixed to be below noise effect */
+/* Canvas overlay */
 canvas {
   display: block;
   position: fixed !important;
@@ -169,8 +176,8 @@ canvas {
   height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
-  z-index: 2; /* Above content but below noise */
-  pointer-events: none; /* Allow clicking through to content */
+  z-index: 2;
+  pointer-events: none;
 }
 
 .info {
@@ -185,11 +192,6 @@ canvas {
   border-radius: 3px;
   pointer-events: none;
   z-index: 10;
-}
-
-/* Controls panel */
-.dg.ac {
-  z-index: 101 !important; /* Make sure GUI is on top of noise */
 }
 
 #container {
@@ -250,35 +252,69 @@ canvas {
   line-height: inherit;
 }
 
-.profile-image {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
+/* ==========================================================================
+   Full Mobile & Small Screen Responsiveness
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+  html, body {
+    cursor: auto;
+  }
+  
+  .custom-cursor {
+    display: none;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .quote-container {
+    max-width: 95%;
+  }
+
+  .center-photo {
+    max-width: min(80vw, 290px);
+    max-height: 42vh;
+  }
+
+  .caption {
+    font-size: 13px;
+    margin-bottom: 1vh;
+  }
+
+  .author {
+    font-size: 12px;
+    margin-top: 0.8vh;
+    margin-bottom: 0.5vh;
+  }
+
+  #controls {
+    top: 14px;
+    left: 14px;
+  }
+
+  #playButton {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  #fps {
+    top: 14px;
+    right: 14px;
+  }
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.profile-name {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.profile-twitter {
-  font-size: 12px;
-  color: #71717a;
-}
-
-.profile-twitter a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.profile-twitter a:hover {
-  text-decoration: underline;
+@media screen and (max-height: 650px) {
+  .center-photo {
+    max-height: 38vh;
+  }
+  
+  .caption {
+    margin-bottom: 0.5vh;
+  }
+  
+  .author {
+    margin-top: 0.5vh;
+    margin-bottom: 0.3vh;
+  }
 }

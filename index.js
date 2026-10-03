@@ -1,4 +1,5 @@
-import * as THREE from "https://esm.sh/three@0.175.0";
+// Three.js scene setup - supports both standalone script (window.THREE) and ES modules
+const THREE = window.THREE || (typeof THREE !== 'undefined' ? THREE : null);
 
 // Scene setup
 let scene, camera, renderer;
@@ -53,45 +54,46 @@ const mouse = {
 
 // Settings
 const settings = {
-  // Animation settings
-  baseSpeed: 1.0,
-  idleSpeed: 0.1,
+  // Animation settings - slow, smooth ambient movement
+  baseSpeed: 0.35,
+  idleSpeed: 0.04,
 
   // Audio reactivity
-  bassReactivity: 0.4, // More moderate
-  midReactivity: 0.5,
-  highReactivity: 0.4,
+  bassReactivity: 0.3,
+  midReactivity: 0.35,
+  highReactivity: 0.3,
 
-  // Kick settings - more subtle defaults
-  kickReactivity: 0.6, // Reduced from 1.0
-  bounceIntensity: 0.15, // More subtle bounce
-  waveIntensity: 0.08,
-  waveComplexity: 2.2,
-  rippleIntensity: 0.25, // Reduced from 0.5
+  // Kick settings - subtle and smooth
+  kickReactivity: 0.4,
+  bounceIntensity: 0.08,
+  waveIntensity: 0.05,
+  waveComplexity: 1.8,
+  rippleIntensity: 0.15,
 
-  // Visual settings
-  lineThickness: 1.8,
-  lineStraightness: 2.53,
+  // Visual settings - smooth thick lines, no hard corners
+  lineThickness: 3.2,
+  lineStraightness: 2.2,
 
   // Transition settings
-  idleWaveHeight: 0.01, // Small waves when idle
-  transitionSmoothness: 0.03, // How smooth the transition is
+  idleWaveHeight: 0.015,
+  transitionSmoothness: 0.02,
 
-  // Color settings
-  colorPreset: "Monochrome",
-  bgColorDown: [40, 20, 10],
-  bgColorUp: [20, 10, 5],
-  color1In: [255, 200, 0],
-  color1Out: [255, 100, 0],
-  color2In: [255, 100, 100],
-  color2Out: [200, 50, 50],
-  color3In: [255, 150, 50],
-  color3Out: [200, 100, 0],
+  // Color settings - sampled directly from prathamesh.jpg
+  // (Deep olive forest, morning golden sunlight, soft misty haze, meadow grass)
+  colorPreset: "Ethereal",
+  bgColorDown: [14, 18, 10],      // Deep natural forest dark
+  bgColorUp: [30, 34, 18],        // Misty canopy olive
+  color1In: [238, 195, 70],       // Golden morning sunlight
+  color1Out: [115, 138, 48],      // Fresh leaf green
+  color2In: [140, 135, 80],       // Morning misty haze
+  color2Out: [72, 75, 34],        // Deep foliage olive
+  color3In: [250, 222, 110],      // Warm sun rays
+  color3Out: [92, 114, 38],       // Meadow grass green
 
   // Grain settings
   enableGrain: true,
-  grainIntensity: 0.075,
-  grainSpeed: 2.0,
+  grainIntensity: 0.06,
+  grainSpeed: 1.2,
   grainMean: 0.0,
   grainVariance: 0.5,
   grainBlendMode: "Addition",
@@ -102,6 +104,46 @@ const settings = {
 
 // Color presets
 const colorPresets = {
+  Ethereal: {
+    bgColorDown: [14, 18, 10],      // Deep natural forest dark
+    bgColorUp: [30, 34, 18],        // Misty canopy olive
+    color1In: [238, 195, 70],       // Golden morning sunlight
+    color1Out: [115, 138, 48],      // Fresh leaf green
+    color2In: [140, 135, 80],       // Morning misty haze
+    color2Out: [72, 75, 34],        // Deep foliage olive
+    color3In: [250, 222, 110],      // Warm sun rays
+    color3Out: [92, 114, 38],       // Meadow grass green
+  },
+  Warm: {
+    bgColorDown: [40, 20, 10],
+    bgColorUp: [20, 10, 5],
+    color1In: [255, 200, 0], // Gold
+    color1Out: [255, 100, 0], // Orange
+    color2In: [255, 100, 100], // Light Red
+    color2Out: [200, 50, 50], // Dark Red
+    color3In: [255, 150, 50], // Light Orange
+    color3Out: [200, 100, 0] // Dark Orange
+  },
+  Aurora: {
+    bgColorDown: [5, 0, 20],
+    bgColorUp: [0, 20, 30],
+    color1In: [0, 255, 127],   // Spring Green
+    color1Out: [0, 250, 154],  // Medium Spring Green
+    color2In: [0, 191, 255],   // Deep Sky Blue
+    color2Out: [135, 206, 235], // Sky Blue
+    color3In: [255, 0, 255],   // Magenta
+    color3Out: [186, 85, 211]  // Medium Orchid
+  },
+  Metallic: {
+    bgColorDown: [40, 40, 40],
+    bgColorUp: [60, 60, 60],
+    color1In: [192, 192, 192], // Silver
+    color1Out: [128, 128, 128], // Gray
+    color2In: [255, 215, 0],   // Gold
+    color2Out: [184, 134, 11], // Dark Goldenrod
+    color3In: [205, 127, 50],  // Bronze
+    color3Out: [139, 69, 19]   // Saddle Brown
+  },
   Default: {
     bgColorDown: [51, 25, 25],
     bgColorUp: [25, 25, 51],
@@ -121,16 +163,6 @@ const colorPresets = {
     color2Out: [0, 128, 255], // Blue
     color3In: [255, 255, 0], // Yellow
     color3Out: [255, 128, 0] // Orange
-  },
-  Warm: {
-    bgColorDown: [40, 20, 10],
-    bgColorUp: [20, 10, 5],
-    color1In: [255, 200, 0], // Gold
-    color1Out: [255, 100, 0], // Orange
-    color2In: [255, 100, 100], // Light Red
-    color2Out: [200, 50, 50], // Dark Red
-    color3In: [255, 150, 50], // Light Orange
-    color3Out: [200, 100, 0] // Dark Orange
   },
   Cool: {
     bgColorDown: [10, 20, 30],
@@ -657,10 +689,16 @@ function init() {
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   camera.position.z = 1;
 
-  // Create renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  // Create renderer using existing canvas element
+  const canvas = document.getElementById("canvas");
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+    alpha: true,
+    powerPreference: "high-performance"
+  });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  container.appendChild(renderer.domElement);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   // Create shader material
   shaderMaterial = new THREE.ShaderMaterial({
@@ -801,14 +839,17 @@ function setupEventListeners() {
   });
 
   // Handle play button
-  document.getElementById("playButton").addEventListener("click", toggleAudio);
+  const playButton = document.getElementById("playButton");
+  if (playButton) {
+    playButton.addEventListener("click", toggleAudio);
+  }
 
   // Handle keyboard shortcuts
   window.addEventListener("keydown", (event) => {
     // Space bar to toggle play/pause
     if (event.code === "Space") {
-      toggleAudio();
       event.preventDefault();
+      toggleAudio();
     }
 
     // 'D' key to toggle debug info
@@ -822,41 +863,51 @@ function setupEventListeners() {
 // Set up audio
 function setupAudio() {
   audioElement = new Audio();
-  audioElement.crossOrigin = "anonymous";
   audioElement.preload = "auto";
-
-  // Use the new audio URL
-  audioElement.src = "/getmoney.m4a";
+  audioElement.src = "ethereal.mp3";
   audioElement.loop = true;
 }
 
 // Toggle audio playback
 function toggleAudio() {
+  const playBtn = document.getElementById("playButton");
   if (!playing) {
     // Initialize audio context if needed
     if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 1024;
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          audioContext = new AudioCtx();
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 1024;
+          analyser.smoothingTimeConstant = 0.8;
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-      // Connect audio element to analyzer
-      audioSource = audioContext.createMediaElementSource(audioElement);
-      audioSource.connect(analyser);
-      analyser.connect(audioContext.destination);
+          try {
+            audioSource = audioContext.createMediaElementSource(audioElement);
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+          } catch (sourceErr) {
+            console.warn("MediaElementSource fallback:", sourceErr);
+          }
+        }
+      } catch (err) {
+        console.warn("AudioContext error:", err);
+      }
     }
 
-    // Resume audio context (needed for newer browsers)
-    audioContext.resume().then(() => {
-      // Play the track
-      audioElement.play().catch((e) => {
-        console.error("Error playing audio:", e);
-      });
+    // Resume audio context if suspended
+    if (audioContext && audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    audioElement.play().catch((e) => {
+      console.warn("Audio play error:", e);
     });
 
-    document.getElementById("playButton").textContent = "STOP";
+    if (playBtn) playBtn.textContent = "STOP";
     playing = true;
-    shaderMaterial.uniforms.isPlaying.value = true;
+    if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = true;
 
     // Reset beat tracking
     beatTime = 0;
@@ -865,9 +916,9 @@ function toggleAudio() {
   } else {
     // Stop playback
     audioElement.pause();
-    document.getElementById("playButton").textContent = "PLAY";
+    if (playBtn) playBtn.textContent = "PLAY";
     playing = false;
-    shaderMaterial.uniforms.isPlaying.value = false;
+    if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = false;
   }
 }
 
@@ -1063,12 +1114,12 @@ function getWeightedAverage(array) {
 function animate(timestamp) {
   requestAnimationFrame(animate);
 
-  // Update time uniform
-  time += 0.01;
+  // Update time uniform slowly for smooth ambient motion
+  time += 0.0035;
   shaderMaterial.uniforms.iTime.value = time;
 
-  // Update idle animation even when not playing
-  idleAnimation += 0.01;
+  // Update idle animation slowly for smooth ambient motion
+  idleAnimation += 0.0035;
   shaderMaterial.uniforms.idleAnimation.value = idleAnimation;
 
   // Update transition factor for smooth animation - use transitionSmoothness
