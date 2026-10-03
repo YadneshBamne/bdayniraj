@@ -7,6 +7,9 @@
     <title>Happiest 20th Birthday Prathamesh</title>
 </head>
 <body>
+    <!-- Background Audio Element -->
+    <audio id="bgAudio" src="ethereal.mp3" preload="auto" loop></audio>
+
     <!-- Content to be revealed -->
 <div class="content">
   <div class="quote-container">
@@ -16,6 +19,24 @@
     </div>
     <div class="author">Happiest 20th bday to you</div>
     <div class="author">Made with immense respect towards our friendship</div>
+    
+    <!-- Action Prompt Paragraph -->
+    <p class="action-prompt">
+      <span class="action-highlight" id="actionPlayMusic">Play the music</span> and <span class="action-highlight" id="actionOpenNote">open the note</span>
+    </p>
+  </div>
+</div>
+
+<!-- Note Modal in Center of Screen -->
+<div class="note-modal-overlay" id="noteModal" aria-hidden="true">
+  <div class="note-modal-card">
+    <button class="note-close-btn" id="closeNoteBtn" aria-label="Close note">&times;</button>
+    <div class="note-header">A Note for You ✨</div>
+    <div class="note-content">
+      <p>Happy birthday, Prathamesh!! 🎂❤️Happy 23rd! I m counting the numbers yk so that one day I can say You r25+ now!😝</p>
+      <p>But yeah I genuinely wish you an amazing journey ahead. I hope you grow healthy, wealthy 🤑, successful, and most importantly, happy. You deserve all the good things coming your way!</p>
+      <p>I nm little late to wish you, sorry for that 😭 But yeahh, happiest birthday to youuu! 🥳🎂 Stay the same amazing person you are!</p>
+    </div>
   </div>
 </div>
 

@@ -844,8 +844,57 @@ function setupEventListeners() {
     playButton.addEventListener("click", toggleAudio);
   }
 
+  // Action prompt: "Play the music" click handler
+  const actionPlayMusic = document.getElementById("actionPlayMusic");
+  if (actionPlayMusic) {
+    actionPlayMusic.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleAudio();
+    });
+  }
+
+  // Action prompt: "open the note" modal handlers
+  const actionOpenNote = document.getElementById("actionOpenNote");
+  const noteModal = document.getElementById("noteModal");
+  const closeNoteBtn = document.getElementById("closeNoteBtn");
+
+  if (actionOpenNote) {
+    actionOpenNote.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (noteModal) {
+        noteModal.classList.add("is-active");
+        noteModal.setAttribute("aria-hidden", "false");
+      }
+    });
+  }
+
+  if (closeNoteBtn) {
+    closeNoteBtn.addEventListener("click", () => {
+      if (noteModal) {
+        noteModal.classList.remove("is-active");
+        noteModal.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
+
+  if (noteModal) {
+    noteModal.addEventListener("click", (e) => {
+      if (e.target === noteModal) {
+        noteModal.classList.remove("is-active");
+        noteModal.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
+
   // Handle keyboard shortcuts
   window.addEventListener("keydown", (event) => {
+    // Escape to close note modal
+    if (event.key === "Escape" && noteModal && noteModal.classList.contains("is-active")) {
+      noteModal.classList.remove("is-active");
+      noteModal.setAttribute("aria-hidden", "true");
+      return;
+    }
+
     // Space bar to toggle play/pause
     if (event.code === "Space") {
       event.preventDefault();
@@ -862,17 +911,22 @@ function setupEventListeners() {
 
 // Set up audio
 function setupAudio() {
-  audioElement = new Audio();
-  audioElement.preload = "auto";
-  audioElement.src = "ethereal.mp3";
-  audioElement.loop = true;
+  audioElement = document.getElementById("bgAudio");
+  if (!audioElement) {
+    audioElement = new Audio("ethereal.mp3");
+    audioElement.loop = true;
+    document.body.appendChild(audioElement);
+  }
 }
 
 // Toggle audio playback
 function toggleAudio() {
+  if (!audioElement) setupAudio();
   const playBtn = document.getElementById("playButton");
+  const playAction = document.getElementById("actionPlayMusic");
+
   if (!playing) {
-    // Initialize audio context if needed
+    // Initialize audio context for WebGL visualizer if supported
     if (!audioContext) {
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -888,11 +942,11 @@ function toggleAudio() {
             audioSource.connect(analyser);
             analyser.connect(audioContext.destination);
           } catch (sourceErr) {
-            console.warn("MediaElementSource fallback:", sourceErr);
+            console.warn("Direct media playback active:", sourceErr);
           }
         }
       } catch (err) {
-        console.warn("AudioContext error:", err);
+        console.warn("AudioContext init:", err);
       }
     }
 
@@ -901,12 +955,24 @@ function toggleAudio() {
       audioContext.resume();
     }
 
-    audioElement.play().catch((e) => {
-      console.warn("Audio play error:", e);
-    });
+    // Play the audio track
+    const playPromise = audioElement.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          playing = true;
+          if (playBtn) playBtn.textContent = "STOP";
+          if (playAction) playAction.textContent = "Pause the music";
+          if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = true;
+        })
+        .catch((e) => {
+          console.warn("Audio playback error:", e);
+        });
+    }
 
-    if (playBtn) playBtn.textContent = "STOP";
     playing = true;
+    if (playBtn) playBtn.textContent = "STOP";
+    if (playAction) playAction.textContent = "Pause the music";
     if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = true;
 
     // Reset beat tracking
@@ -916,8 +982,9 @@ function toggleAudio() {
   } else {
     // Stop playback
     audioElement.pause();
-    if (playBtn) playBtn.textContent = "PLAY";
     playing = false;
+    if (playBtn) playBtn.textContent = "PLAY";
+    if (playAction) playAction.textContent = "Play the music";
     if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = false;
   }
 }
@@ -1165,9 +1232,15 @@ function animate(timestamp) {
   }
 }
 
-// Initialize when the page loads
-window.onload = () => {
+// Initialize when the page is ready
+function startApplication() {
   init();
-  // Apply the initial color preset after initialization
   applyColorPreset(settings.colorPreset);
-};
+}
+
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  startApplication();
+} else {
+  document.addEventListener("DOMContentLoaded", startApplication);
+  window.addEventListener("load", startApplication);
+}
