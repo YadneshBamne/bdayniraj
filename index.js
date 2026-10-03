@@ -844,57 +844,16 @@ function setupEventListeners() {
     playButton.addEventListener("click", toggleAudio);
   }
 
-  // Action prompt: "Play the music" click handler
-  const actionPlayMusic = document.getElementById("actionPlayMusic");
-  if (actionPlayMusic) {
-    actionPlayMusic.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleAudio();
-    });
-  }
-
-  // Action prompt: "open the note" modal handlers
-  const actionOpenNote = document.getElementById("actionOpenNote");
-  const noteModal = document.getElementById("noteModal");
-  const closeNoteBtn = document.getElementById("closeNoteBtn");
-
-  if (actionOpenNote) {
-    actionOpenNote.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (noteModal) {
-        noteModal.classList.add("is-active");
-        noteModal.setAttribute("aria-hidden", "false");
-      }
-    });
-  }
-
-  if (closeNoteBtn) {
-    closeNoteBtn.addEventListener("click", () => {
-      if (noteModal) {
-        noteModal.classList.remove("is-active");
-        noteModal.setAttribute("aria-hidden", "true");
-      }
-    });
-  }
-
-  if (noteModal) {
-    noteModal.addEventListener("click", (e) => {
-      if (e.target === noteModal) {
-        noteModal.classList.remove("is-active");
-        noteModal.setAttribute("aria-hidden", "true");
-      }
+  // Handle click on flip card for mobile tap and desktop click toggle
+  const flipCard = document.getElementById("flipCard");
+  if (flipCard) {
+    flipCard.addEventListener("click", () => {
+      flipCard.classList.toggle("is-flipped");
     });
   }
 
   // Handle keyboard shortcuts
   window.addEventListener("keydown", (event) => {
-    // Escape to close note modal
-    if (event.key === "Escape" && noteModal && noteModal.classList.contains("is-active")) {
-      noteModal.classList.remove("is-active");
-      noteModal.setAttribute("aria-hidden", "true");
-      return;
-    }
-
     // Space bar to toggle play/pause
     if (event.code === "Space") {
       event.preventDefault();
@@ -923,7 +882,6 @@ function setupAudio() {
 function toggleAudio() {
   if (!audioElement) setupAudio();
   const playBtn = document.getElementById("playButton");
-  const playAction = document.getElementById("actionPlayMusic");
 
   if (!playing) {
     // Initialize audio context for WebGL visualizer if supported
@@ -962,7 +920,6 @@ function toggleAudio() {
         .then(() => {
           playing = true;
           if (playBtn) playBtn.textContent = "STOP";
-          if (playAction) playAction.textContent = "Pause the music";
           if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = true;
         })
         .catch((e) => {
@@ -972,7 +929,6 @@ function toggleAudio() {
 
     playing = true;
     if (playBtn) playBtn.textContent = "STOP";
-    if (playAction) playAction.textContent = "Pause the music";
     if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = true;
 
     // Reset beat tracking
@@ -984,7 +940,6 @@ function toggleAudio() {
     audioElement.pause();
     playing = false;
     if (playBtn) playBtn.textContent = "PLAY";
-    if (playAction) playAction.textContent = "Play the music";
     if (shaderMaterial) shaderMaterial.uniforms.isPlaying.value = false;
   }
 }

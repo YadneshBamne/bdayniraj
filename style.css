@@ -2,20 +2,12 @@
 Based on the https://www.shadertoy.com/view/MtVBzG
 */
 
-/* Single font import instead of multiple */
-@import url("https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap");
 
-/* Variables for easy customization */
 :root {
-  --primary-font: "Boldonse", sans-serif;
-  --secondary-font: "Bodoni Moda", serif;
   --primary-color: #e0e0e0;
   --secondary-color: rgba(255, 255, 255, 0.5);
-  --quote-size: 8vw;
-  --author-size: 1vw;
   --cursor-size: 16px;
-  --ghost-color: #000000;
-  --eye-glow-color: #ffff00;
 }
 
 * {
@@ -31,8 +23,9 @@ body {
   overflow: hidden;
   cursor: none;
   background-color: #111;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Background noise effect with will-change optimization */
@@ -67,7 +60,7 @@ body::before {
   100% { transform: translate(1%, 0); }
 }
 
-/* Content to be revealed */
+/* Centered Content: Minimal Flip Card */
 .content {
   position: fixed;
   top: 0;
@@ -75,195 +68,91 @@ body::before {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 20;
   padding: 16px;
-  text-align: center;
-  color: var(--primary-color);
   pointer-events: none;
 }
 
-.quote-container {
-  max-width: 90%;
-  max-height: 94vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  pointer-events: auto;
-}
-
-.quote {
-  font-family: var(--primary-font);
-  font-size: var(--quote-size);
-  line-height: 1.3;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  margin-bottom: 5vh;
-  opacity: 1;
-  text-transform: uppercase;
-}
-
-/* Center Image with sharp corners */
-.image-centerpiece {
-  position: relative;
+/* 3D Flip Card Container */
+.flip-card {
+  perspective: 1200px;
   display: inline-block;
-  margin: 1.5vh auto 2vh;
-  border-radius: 0; /* Sharp corners as requested */
-  overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  border-radius: 0;
 }
 
+.flip-card-inner {
+  position: relative;
+  display: block;
+  transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7);
+  border-radius: 0;
+}
+
+/* Flip on hover (desktop) or when clicked / tapped (.is-flipped) */
+.flip-card:hover .flip-card-inner,
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 0; /* Sharp corners */
+  overflow: hidden;
+}
+
+.flip-card-front {
+  display: block;
+}
+
+/* Sharp-cornered image */
 .center-photo {
   display: block;
-  max-width: min(75vw, 340px);
-  max-height: 48vh;
+  max-width: min(78vw, 340px);
+  max-height: 52vh;
   width: auto;
   height: auto;
   object-fit: cover;
-  border-radius: 0; /* Sharp corners as requested */
+  border-radius: 0; /* Sharp corners */
 }
 
-.author {
-  font-family: var(--secondary-font);
-  font-size: clamp(0.75rem, 1.2vw, 1.1rem);
-  font-style: italic;
-  opacity: 0.75;
-  margin-top: 1.2vh;
-  margin-bottom: 1vh;
-  line-height: 1.35;
-}
-
-.caption {
-  font-family: var(--secondary-font);
-  font-size: clamp(0.8rem, 1.2vw, 1.15rem);
-  margin-bottom: 1.5vh;
-  line-height: 1.35;
-}
-
-/* Action Prompt & Highlights */
-.action-prompt {
-  font-family: var(--secondary-font);
-  font-size: clamp(0.85rem, 1.3vw, 1.15rem);
-  margin-top: 1.8vh;
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: -0.01em;
-  user-select: none;
-}
-
-.action-highlight {
-  color: #f59e0b;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.25s ease;
-  display: inline-block;
-}
-
-.action-highlight:hover {
-  color: #ffffff;
-  background: rgba(245, 158, 11, 0.3);
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.9);
-  transform: translateY(-1px);
-}
-
-/* Note Modal in Center of Screen */
-.note-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* Back of Card: Clean Minimal Birthday Note */
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  background: rgba(18, 22, 14, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 20px;
+  padding: 24px 20px;
+  box-sizing: border-box;
 }
 
-.note-modal-overlay.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.note-modal-card {
-  position: relative;
-  background: rgba(18, 22, 14, 0.95);
-  border: 1px solid rgba(238, 195, 70, 0.4);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(238, 195, 70, 0.2);
-  max-width: 480px;
-  width: 90vw;
-  max-height: 82vh;
-  overflow-y: auto;
-  padding: 30px 24px 26px;
+.note-text {
+  font-size: clamp(0.82rem, 1.25vw, 0.95rem);
+  line-height: 1.6;
   color: #f3f4f6;
   text-align: left;
-  transform: scale(0.92);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  max-height: 100%;
+  padding-right: 4px;
 }
 
-.note-modal-overlay.is-active .note-modal-card {
-  transform: scale(1);
+.note-text p {
+  margin-bottom: 12px;
 }
 
-.note-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: color 0.2s;
-}
-
-.note-close-btn:hover {
-  color: #f59e0b;
-}
-
-.note-header {
-  font-family: var(--secondary-font);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #f59e0b;
-  margin-bottom: 16px;
-  border-bottom: 1px solid rgba(238, 195, 70, 0.25);
-  padding-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-
-.note-content p {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.65;
-  margin-bottom: 14px;
-  color: #e5e7eb;
-}
-
-.note-content p:last-child {
+.note-text p:last-child {
   margin-bottom: 0;
-}
-
-.book {
-  font-family: var(--secondary-font);
-  font-size: var(--author-size);
-  opacity: 0.5;
-  margin-top: 1vh;
 }
 
 /* Custom cursor */
@@ -293,20 +182,6 @@ canvas {
   padding: 0 !important;
   z-index: 2;
   pointer-events: none;
-}
-
-.info {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  color: white;
-  font-family: monospace;
-  font-size: 12px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 10px;
-  border-radius: 3px;
-  pointer-events: none;
-  z-index: 10;
 }
 
 #container {
@@ -353,22 +228,14 @@ canvas {
 }
 
 .profile-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  max-width: 300px;
-  width: 100%;
   position: fixed;
   bottom: 16px;
   left: 16px;
   z-index: 999;
-  color: var(--primary-color);
-  line-height: inherit;
 }
 
 /* ==========================================================================
-   Full Mobile & Small Screen Responsiveness
+   Mobile & Small Screen Responsiveness
    ========================================================================== */
 @media screen and (max-width: 768px) {
   html, body {
@@ -383,24 +250,18 @@ canvas {
     padding: 10px;
   }
 
-  .quote-container {
-    max-width: 95%;
-  }
-
   .center-photo {
-    max-width: min(80vw, 290px);
-    max-height: 42vh;
+    max-width: min(85vw, 300px);
+    max-height: 48vh;
   }
 
-  .caption {
-    font-size: 13px;
-    margin-bottom: 1vh;
+  .note-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
   }
 
-  .author {
-    font-size: 12px;
-    margin-top: 0.8vh;
-    margin-bottom: 0.5vh;
+  .flip-card-back {
+    padding: 18px 16px;
   }
 
   #controls {
@@ -421,15 +282,6 @@ canvas {
 
 @media screen and (max-height: 650px) {
   .center-photo {
-    max-height: 38vh;
-  }
-  
-  .caption {
-    margin-bottom: 0.5vh;
-  }
-  
-  .author {
-    margin-top: 0.5vh;
-    margin-bottom: 0.3vh;
+    max-height: 42vh;
   }
 }
